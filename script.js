@@ -20,27 +20,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalButton = document.getElementById('close-modal-button');
     const modalContent = document.getElementById('modal-content');
 
-    let fileData = null;
+    let uploadedFile = null; // Store the actual file object
 
     const handleFile = (file) => {
         if (file && file.type.startsWith('image/')) {
+            uploadedFile = file; // Keep the file object
             const reader = new FileReader();
             reader.onload = (e) => {
                 previewImage.src = e.target.result;
                 previewImage.classList.remove('hidden');
                 uploadIcon.classList.add('hidden');
                 uploadText.classList.add('hidden');
-                fileData = e.target.result.split(',')[1]; // Get base64 data
                 analyzeButton.disabled = false;
             };
             reader.readAsDataURL(file);
         } else {
-            // Using a custom modal/alert in the future would be better
+            // In a real app, use a custom modal for alerts
             alert('Please upload a valid image file (PNG, JPG).');
+            uploadedFile = null;
+            analyzeButton.disabled = true;
         }
     };
 
     fileUpload.addEventListener('change', (e) => handleFile(e.target.files[0]));
+    
+    // Drag and Drop Listeners
     dropZone.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropZone.classList.add('border-blue-500', 'bg-gray-800/50');
@@ -52,13 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
     dropZone.addEventListener('drop', (e) => {
         e.preventDefault();
         dropZone.classList.remove('border-blue-500', 'bg-gray-800/50');
-        handleFile(e.dataTransfer.files[0]);
-    });
-    analyzeButton.addEventListener('click', () => {
-        if (fileData) {
-            analyzeDocument(fileData);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            handleFile(e.dataTransfer.files[0]);
         }
     });
+
+    analyzeButton.addEventListener('click', () => {
+        if (uploadedFile) {
+            analyzeDocument(uploadedFile);
+        }
+    });
+
     closeModalButton.addEventListener('click', () => {
         resultsModal.classList.add('hidden');
         resultsModal.classList.remove('flex');
@@ -118,31 +126,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function analyzeDocument(file) {
         showLoading(true);
-        try {
-            const formData = new FormData();
-            formData.append('document', file);
+        // Create a FormData object to send the file
+        const formData = new FormData();
+        formData.append('document', file); // Append the actual file object
 
+        try {
             const response = await fetch('https://sih-hack.vercel.app/api/analyze', {
                 method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                },
+                // Do not set Content-Type header; the browser does it automatically for FormData
                 body: formData
             });
 
+            // Try to parse JSON regardless of response status to get error messages
+            const data = await response.json();
+
             if (!response.ok) {
-                throw new Error(`Request failed with status ${response.status}: ${response.statusText}`);
+                 // Use the error message from the server if available
+                throw new Error(data.error || `Request failed with status ${response.status}`);
             }
 
-            const data = await response.json();
             displayResults(data);
 
         } catch (error) {
             console.error('Error analyzing document:', error);
-            displayResults({ error: `Failed to analyze document. ${error.message}` });
+            // Display the specific error message
+            displayResults({ error: error.message || 'Failed to connect to the analysis service.' });
         } finally {
             showLoading(false);
         }
     }
 });
-
