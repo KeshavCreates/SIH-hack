@@ -11,58 +11,59 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    try {
-        upload.single('document')(req, res, async function(err) {
-            if (err) {
-                return res.status(400).json({ error: 'File upload failed' });
-            }
+    upload.single('document')(req, res, async function(err) {
+        if (err) {
+            return res.status(400).json({ error: 'File upload failed' });
+        }
 
-            if (!req.file) {
-                return res.status(400).json({ error: 'No file provided' });
-            }
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file provided' });
+        }
 
-            const { imageData } = req.body;
-            if (!imageData) {
-                return res.status(400).json({ error: 'Bad Request: Missing imageData' });
-            }
+        // Convert uploaded file to base64
+        const imageBuffer = req.file.buffer;
+        const imageBase64 = imageBuffer.toString('base64');
+        // Detect mime type (default to jpeg if not present)
+        const mimeType = req.file.mimetype || 'image/jpeg';
 
-            const apiKey = process.env.GEMINI_API_KEY;
-            if (!apiKey) {
-                console.error('API key is not set in environment variables.');
-                return res.status(500).json({ error: 'Server Error: API key not configured.' });
-            }
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            console.error('API key is not set in environment variables.');
+            return res.status(500).json({ error: 'Server Error: API key not configured.' });
+        }
 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
-            const systemPrompt = `You are an AI legal assistant named TermsGuard. Analyze legal document images. 
-            1. Provide a concise, easy-to-understand summary of the document's purpose.
-            2. List key details like clauses, responsibilities, and deadlines.
-            3. Highlight potential risks (fees, ambiguous language). For each risk, you MUST classify its severity as 'Low', 'Medium', or 'High'.
-            
-            You MUST respond ONLY with a valid JSON object with this exact structure:
-            {
-              "summary": "string",
-              "keyDetails": ["string"],
-              "risks": [{"risk": "string", "severity": "'Low'|'Medium'|'High'"}]
-            }`;
+        const systemPrompt = `You are an AI legal assistant named TermsGuard. Analyze legal document images. 
+        1. Provide a concise, easy-to-understand summary of the document's purpose.
+        2. List key details like clauses, responsibilities, and deadlines.
+        3. Highlight potential risks (fees, ambiguous language). For each risk, you MUST classify its severity as 'Low', 'Medium', or 'High'.
+        
+        You MUST respond ONLY with a valid JSON object with this exact structure:
+        {
+          "summary": "string",
+          "keyDetails": ["string"],
+          "risks": [{"risk": "string", "severity": "'Low'|'Medium'|'High'"}]
+        }`;
 
-            const payload = {
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                contents: [{
-                    parts: [
-                        { text: "Analyze the document image and provide the analysis in the required JSON format." },
-                        { inlineData: { mimeType: "image/jpeg", data: imageData } }
-                    ]
-                }],
-                generationConfig: { responseMimeType: "application/json" }
-            };
-            
+        const payload = {
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            contents: [{
+                parts: [
+                    { text: "Analyze the document image and provide the analysis in the required JSON format." },
+                    { inlineData: { mimeType: mimeType, data: imageBase64 } }
+                ]
+            }],
+            generationConfig: { responseMimeType: "application/json" }
+        };
+        
+        try {
             const geminiResponse = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            
+
             const result = await geminiResponse.json();
 
             if (!geminiResponse.ok) {
@@ -81,9 +82,9 @@ export default async function handler(req, res) {
                 console.error('Invalid response structure from Gemini API:', result);
                 return res.status(500).json({ error: 'Invalid or empty response structure from the AI service.' });
             }
-        });
-    } catch (error) {
-        console.error('Error in Vercel function:', error);
-        return res.status(500).json({ error: error.message || 'An internal server error occurred.' });
-    }
+        } catch (error) {
+            console.error('Error in Vercel function:', error);
+            return res.status(500).json({ error: error.message || 'An internal server error occurred.' });
+        }
+    });
 }
