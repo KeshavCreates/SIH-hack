@@ -126,22 +126,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function analyzeDocument(file) {
         showLoading(true);
-        // Create a FormData object to send the file
         const formData = new FormData();
-        formData.append('document', file); // Append the actual file object
+        formData.append('document', file);
 
         try {
-            const response = await fetch('https://sih-hack.vercel.app/api/analyze', {
+            // CORRECTED: Changed to a relative URL to prevent CORS/404 errors.
+            const response = await fetch('/api/analyze', {
                 method: 'POST',
-                // Do not set Content-Type header; the browser does it automatically for FormData
                 body: formData
             });
 
-            // Try to parse JSON regardless of response status to get error messages
             const data = await response.json();
 
             if (!response.ok) {
-                 // Use the error message from the server if available
                 throw new Error(data.error || `Request failed with status ${response.status}`);
             }
 
@@ -149,10 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error analyzing document:', error);
-            // Display the specific error message
             displayResults({ error: error.message || 'Failed to connect to the analysis service.' });
         } finally {
             showLoading(false);
         }
     }
 });
+
