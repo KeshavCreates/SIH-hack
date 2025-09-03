@@ -5,7 +5,7 @@ const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 
 export default async function handler(req, res) {
-    // CORS headers
+    // CORS headers for all requests
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -22,6 +22,11 @@ export default async function handler(req, res) {
     }
 
     upload.single('document')(req, res, async function(err) {
+        // CORS headers for responses inside multer callback
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
         if (err) {
             return res.status(400).json({ error: 'File upload failed' });
         }
