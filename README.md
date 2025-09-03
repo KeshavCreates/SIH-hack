@@ -1,7 +1,7 @@
 ## 📖 Project Description
 
 ✨ **What the App Does**  
-SIH-Hack is an **AI-powered document analysis tool** that helps users quickly understand **Terms & Conditions** or other complex legal documents before signing them. Instead of struggling through pages of jargon, users can upload their document and instantly receive a **clear, simplified breakdown**.
+TermsGuard is an **AI-powered document analysis tool** that helps users quickly understand **Terms & Conditions** or other complex legal documents before signing them. Instead of struggling through pages of jargon, users can upload their document and instantly receive a **clear, simplified breakdown**.
 
 🔍 **Core Features:**  
 - 📂 **Upload Any Document** – Drag & drop PDFs, PNGs, or JPGs containing your Terms & Conditions.  
