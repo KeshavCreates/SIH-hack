@@ -1,67 +1,24 @@
-# SIH-Hack
+## 📖 Project Description
 
-A sleek, responsive front-end project built using HTML, CSS, and JavaScript—deployed and live via Vercel.
+✨ **What the App Does**  
+SIH-Hack is an **AI-powered document analysis tool** that helps users quickly understand **Terms & Conditions** or other complex legal documents before signing them. Instead of struggling through pages of jargon, users can upload their document and instantly receive a **clear, simplified breakdown**.
 
----
+🔍 **Core Features:**  
+- 📂 **Upload Any Document** – Drag & drop PDFs, PNGs, or JPGs containing your Terms & Conditions.  
+- 🤖 **AI Analysis** – The system scans every clause to detect risks, hidden fees, deadlines, and concerning terms.  
+- 📊 **Get Results** – Instantly receive a comprehensive, plain-English report with highlighted risks and easy-to-read explanations.  
 
-##  Live Demo
+⚙️ **How It Works**  
+1. **Upload Document** → User uploads a T&C or contract file.  
+2. **AI Processing** → Our AI analyzes the text, identifies potential risks, and simplifies technical language.  
+3. **Clarity Delivered** → Users receive a **detailed report** that highlights key details, summarizes complex clauses, and translates jargon into plain English.  
 
-Check out the live version here: [sih-hack.vercel.app](https://sih-hack.vercel.app)
+✨ Additional Capabilities:  
+- 🗝️ **Identify Key Details** – Never miss important clauses, conditions, or deadlines.  
+- ⚡ **Simplify Complexity** – Converts long, technical legal text into short, understandable summaries.  
+- 🌎 **Speak Your Language** – Contracts can be translated into your preferred language while keeping legal meaning intact.  
 
----
+⚠️ **Why This Matters**  
+> “Don’t Sign Blind. Know Your Terms.”  
+Our tool empowers users to make informed decisions by turning confusing legal documents into clear, actionable insights.
 
-##  Technologies Used
-
-- **HTML** for semantic page structure  
-- **CSS** for styling and layout  
-- **JavaScript** for interactive behavior  
-- **Vercel** for effortless deployment and hosting  
-
----
-
-##  Project Overview
-
-SIH-Hack is a front-end web application that demonstrates modern, responsive design and interactive features. Structured with clean code and modular assets, the project is easy to navigate and customize.
-
----
-
-##  Repository Structure
-
-```
-SIH-hack/
-├── api/                # API endpoint handlers (if any)
-├── index.html          # Main HTML page
-├── style.css           # Custom styles
-├── script.js           # JavaScript logic
-├── package.json        # Project metadata and dependencies
-└── vercel.json         # Vercel deployment configuration
-```
-
----
-
-##  Getting Started
-
-To get the project running locally:
-
-```bash
-git clone https://github.com/KeshavCreates/SIH-hack.git
-cd SIH-hack
-npm install              # Install dependencies (if any)
-npm start                # Run the project locally
-```
-
-Alternatively, simply open `index.html` in your browser to preview the static frontend.
-
----
-
-##  Contribution
-
-Contributions are welcome! Whether it's enhancing features, optimizing styles, or improving code structure—feel free to open issues or pull requests. For major changes, please open an issue first to discuss your ideas.
-
----
-
-##  Contact
-
-Have questions or suggestions? Reach out—I'd love to hear from you!
-
----
