@@ -116,34 +116,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>`;
     };
 
-    async function analyzeDocument(base64ImageData) {
+    async function analyzeDocument(file) {
         showLoading(true);
-        // This is the endpoint for our Netlify serverless function
-        const netlifyFunctionUrl = '/.netlify/functions/analyze';
         try {
-            const response = await fetch(netlifyFunctionUrl, {
+            const formData = new FormData();
+            formData.append('document', file);
+
+            const response = await fetch('https://sih-hack.vercel.app/api/analyze', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ imageData: base64ImageData })
+                headers: {
+                    'Accept': 'application/json',
+                },
+                body: formData
             });
 
-            // If the server response is not OK (e.g., 4xx, 5xx), handle it as an error.
             if (!response.ok) {
-                let errorMessage = `Request failed with status ${response.status}`;
-                try {
-                    // Try to get a specific error message from the JSON body
-                    const errorResult = await response.json();
-                    errorMessage = errorResult.error || errorMessage;
-                } catch (e) {
-                    // If the response body isn't JSON, use the status text
-                    errorMessage = `${errorMessage}: ${response.statusText}`;
-                }
-                throw new Error(errorMessage);
+                throw new Error(`Request failed with status ${response.status}: ${response.statusText}`);
             }
 
-            // If the response is OK, we expect valid JSON.
-            const result = await response.json();
-            displayResults(result);
+            const data = await response.json();
+            displayResults(data);
 
         } catch (error) {
             console.error('Error analyzing document:', error);
