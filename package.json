@@ -1,0 +1,16 @@
+{
+  "name": "termsguard-vercel",
+  "version": "1.0.0",
+  "description": "AI Document Analyzer using Gemini 2.5 Flash and Vercel Functions.",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}
+

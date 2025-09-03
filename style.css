@@ -1,0 +1,28 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0B1120;
+    color: #F3F4F6;
+}
+.glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.gradient-text {
+    background: linear-gradient(90deg, #60A5FA, #3B82F6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.cta-button {
+    transition: all 0.3s ease;
+}
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+}
+.step-circle {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+}
