@@ -1,22 +1,31 @@
-# TermsGuard (SIH Hackathon)
+# TermsGuard (SIH Hackathon Build)
 
-What the App Does
-TermsGuard is an AI powered document analysis tool that I built to help users quickly understand Terms and Conditions or other complex legal documents before signing them. Instead of struggling through pages of jargon, users can upload their document and instantly receive a clear, simplified breakdown.
+This repo is my Smart India Hackathon implementation of TermsGuard, an AI tool that breaks down legal documents into plain language.
 
-Core Features:
-* Upload Any Document: Drag and drop PDFs, PNGs, or JPGs containing your Terms and Conditions.
-* AI Analysis: The system scans every clause to detect risks, hidden fees, deadlines, and concerning terms.
-* Get Results: Instantly receive a comprehensive, plain English report with highlighted risks and easy to read explanations.
+## What I built
 
-How It Works
-1. Upload Document: User uploads a Terms and Conditions or contract file.
-2. AI Processing: Our AI analyzes the text, identifies potential risks, and simplifies technical language.
-3. Clarity Delivered: Users receive a detailed report that highlights key details, summarizes complex clauses, and translates jargon into plain English.
+I built this version to prove the core workflow fast: upload a legal document image, run AI analysis, and return a readable report with clear risks.
 
-Additional Capabilities:
-* Identify Key Details: Never miss important clauses, conditions, or deadlines.
-* Simplify Complexity: Converts long, technical legal text into short, understandable summaries.
-* Speak Your Language: Contracts can be translated into your preferred language while keeping the legal meaning intact.
+## Core features
 
-Why This Matters
-Our tool empowers users to make informed decisions by turning confusing legal documents into clear, actionable insights. By using "Don't Sign Blind. Know Your Terms." as our motto, we want to help people understand what they sign.
+- Document image upload and preview
+- AI-generated summary and key details
+- Risk list with severity labels
+- Serverless analysis endpoint (`/api/analyze`)
+
+## Stack
+
+- Vanilla HTML/CSS/JS frontend
+- Vercel Serverless Function
+- Gemini API
+- `multer` + `node-fetch`
+
+## Run locally
+
+```bash
+npm install
+export GEMINI_API_KEY=your_key_here
+npx vercel dev
+```
+
+Open the local Vercel URL and test the upload + analysis flow.
